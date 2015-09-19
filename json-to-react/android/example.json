@@ -1,0 +1,26 @@
+{ 
+    "root" : {
+        "children" : [
+            {
+                "type" : "container",
+                "style" : {
+                    "marginTop" : 10,
+                    "marginLeft" : 10,
+                    "width" : 10,
+                    "height" : 10
+                },
+                "id" : "temp_one"
+            },
+            {
+                "type" : "container",
+                "style" : {
+                    "marginTop" : 30,
+                    "marginLeft" : 10,
+                    "width" : 10,
+                    "height" : 10
+                },
+                "id" : "temp_two"
+            }
+        ]
+    }
+}
