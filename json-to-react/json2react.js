@@ -69,12 +69,13 @@ function build_jsx_and_stylesheet (view_json, callback) {
 }
 
 
-function generate_react () {
-    var writable = fs.createWriteStream('./react_gen/test.js');
+function generate_react() {
+    var filePath = './react_gen/Test/index.android.js';
+    var writable = fs.createWriteStream(filePath);
     var readable = fs.createReadStream('react_template/android_template_1.js');
     readable.pipe(writable);
     writable.on('finish', function () {
-        var writable = fs.createWriteStream('./react_gen/test.js', { flags: 'a' });
+        var writable = fs.createWriteStream(filePath, { flags: 'a' });
         var readable = fs.createReadStream('react_template/android_template_2.js');
         get_json(function (success, view_json) {
             build_jsx_and_stylesheet(view_json, function (JSXArray, Stylesheet) {
@@ -84,7 +85,7 @@ function generate_react () {
                 }
                 readable.pipe(writable);
                 writable.on('finish', function () {
-                    var writable = fs.createWriteStream('./react_gen/test.js', { flags: 'a' });
+                    var writable = fs.createWriteStream(filePath, { flags: 'a' });
                     for (var i in Stylesheet) {
                         writable.write(Stylesheet[i]);
                         writable.write("\n");
