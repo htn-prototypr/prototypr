@@ -12,12 +12,11 @@ import cv2
 import json
 import random
 import string
-# import pytesseract
-# import Image
-# from PIL import ImageFilter, ImageEnhance
+import pytesseract
+import Image
 
 IMG = None
-INPUT = 'data/pic7.png'
+INPUT = 'data/test.jpg'
 OUTPUT = 'json/app.json'
 ID_LENGTH = 5   # for ids used in the json
 SCREEN_W = 360
@@ -50,6 +49,9 @@ class Rectangle(object):
     def height(self):
         return (int)(self.p2[1] - self.p1[1])
 
+    def area(self):
+        return self.width()*self.height()
+
     def get_scales(self):
         if self.parent:
             return self.parent.get_scales()
@@ -61,14 +63,18 @@ class Rectangle(object):
         node_id = ''.join(random.choice(string.ascii_uppercase) for _ in range(ID_LENGTH))
 
         if not self.children:
-            # crop_img = IMG[self.p1[1]: self.p2[1], self.p1[0]:self.p2[0]]
-            # img = Image.fromarray(crop_img)
-            # # img = img.filter(ImageFilter.SHARPEN)
+            crop_img = IMG[self.p1[1]: self.p2[1], self.p1[0]:self.p2[0]]
+            th3 = cv2.adaptiveThreshold(crop_img,255,cv2.ADAPTIVE_THRESH_GAUSSIAN_C,\
+            cv2.THRESH_BINARY,11,4)
+            st = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (3,3))
+            th3 = cv2.morphologyEx(th3, cv2.MORPH_OPEN, st, iterations=4)
             # enhancer = ImageEnhance.Sharpness(img)
             # enhancer.enhance(0.8)
 
-            # node_str = pytesseract.image_to_string(img)
+            tess = Image.fromarray(th3)
+            node_str = pytesseract.image_to_string(tess)
             # print node_str
+            # tess.show()
             node_type = 'textview'
 
 
@@ -178,7 +184,8 @@ def deduplicate_rects(rects):
     return [rect for i, rect in enumerate(rects) if i not in rects_to_remove]
 
 def save_to_json(tree):
-    json_list = [node.to_dict() for node in tree[0].children]
+    tree.sort(key=lambda x: x.area())
+    json_list = [node.to_dict() for node in tree[-1].children]
     with open(OUTPUT, 'w') as out:
         json.dump({'root': {'children': json_list}}, out) 
 
@@ -192,6 +199,8 @@ if __name__ == '__main__':
 
     #read in
     og_img = cv2.imread(f)
+    if og_img.shape[0] > 720 or og_img.shape[1] > 1280:
+        og_img = cv2.resize(og_img, (1080, 1920))
 
     #preprocess
     global IMG
@@ -213,6 +222,6 @@ if __name__ == '__main__':
     can = cv2.cvtColor(can, cv2.COLOR_GRAY2RGB)
     cv2.drawContours(can, rects, -1, (0, 255, 0), 3 )
 
-    cv2.imshow('rectangles', can)
-    ch = 0xFF & cv2.waitKey()
+    # cv2.imshow('rectangles', can)
+    # ch = 0xFF & cv2.waitKey()
 
