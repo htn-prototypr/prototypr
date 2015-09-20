@@ -98,6 +98,6 @@ function generate_react(generator) {
 }
 
 var android_generator = require('./generators/android_generator');
-var ios_geneartor = require('./generators/ios_generator');
+var ios_generator = require('./generators/ios_generator');
 
 generate_react(android_generator);
