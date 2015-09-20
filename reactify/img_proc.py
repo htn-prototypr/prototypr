@@ -14,9 +14,10 @@ import random
 import string
 # import pytesseract
 # import Image
+# from PIL import ImageFilter, ImageEnhance
 
 IMG = None
-INPUT = 'data/pic6.png'
+INPUT = 'data/pic7.png'
 OUTPUT = 'json/app.json'
 ID_LENGTH = 5   # for ids used in the json
 SCREEN_W = 360
@@ -57,14 +58,19 @@ class Rectangle(object):
 
     def to_dict(self):
         node_type = 'container'
-        if not self.children:
-            crop_img = IMG[self.p1[1]: self.p2[1], self.p1[0]:self.p2[0]]
-            # crop_img_pil = Image.fromarray(crop_img)
-            # node_str = pytesseract.image_to_string(crop_img_pil)
-            # print node_str
-            node_type = 'container'
-
         node_id = ''.join(random.choice(string.ascii_uppercase) for _ in range(ID_LENGTH))
+
+        if not self.children:
+            # crop_img = IMG[self.p1[1]: self.p2[1], self.p1[0]:self.p2[0]]
+            # img = Image.fromarray(crop_img)
+            # # img = img.filter(ImageFilter.SHARPEN)
+            # enhancer = ImageEnhance.Sharpness(img)
+            # enhancer.enhance(0.8)
+
+            # node_str = pytesseract.image_to_string(img)
+            # print node_str
+            node_type = 'textview'
+
 
         scale_w, scale_h = self.get_scales()
 
@@ -172,7 +178,7 @@ def deduplicate_rects(rects):
     return [rect for i, rect in enumerate(rects) if i not in rects_to_remove]
 
 def save_to_json(tree):
-    json_list = [node.to_dict() for node in tree]
+    json_list = [node.to_dict() for node in tree[0].children]
     with open(OUTPUT, 'w') as out:
         json.dump({'root': {'children': json_list}}, out) 
 
