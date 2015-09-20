@@ -177,6 +177,7 @@ def save_to_json(tree):
         json.dump({'root': {'children': json_list}}, out) 
 
 if __name__ == '__main__':
+    global IMG
     import sys
 
     if len(sys.argv) >= 2:
@@ -185,11 +186,7 @@ if __name__ == '__main__':
         f = INPUT
 
     #read in
-    og_img = cv2.imread(f)
-
-    #preprocess
-    global IMG
-    IMG = cv2.cvtColor(og_img, cv2.COLOR_BGR2GRAY)
+    IMG = cv2.imread(f, 0)
 
     # canny edge detection
     can = cv2.Canny(IMG, 50, 200)
