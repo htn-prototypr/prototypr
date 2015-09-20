@@ -79,7 +79,8 @@ class Rectangle(object):
                     node_id = clean_str + "-button"
             else:
                 # default
-                node_type = 'unknown'
+                node_type = 'image_view'
+
 
         scale_w, scale_h = self.get_scales()
 
