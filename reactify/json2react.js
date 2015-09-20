@@ -40,7 +40,7 @@ function add_stylesheet_entry (Stylesheet, view, level) {
 
     // add default styles for a text view
     if (view.type === 'text_view') {
-        Stylesheet.push("    fontSize: '12',");
+        Stylesheet.push("    fontSize: 12,");
         Stylesheet.push("    textAlign: 'center',");
     }
 
