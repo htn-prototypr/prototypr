@@ -188,11 +188,15 @@ if __name__ == '__main__':
 
     if len(sys.argv) >= 2:
         f = sys.argv[1]
+        print 'filename: ', f
     else:
         f = INPUT
 
     #read in
-    IMG = cv2.imread(f, 0)
+    og_img = cv2.imread(f)
+
+    #preprocess
+    IMG = cv2.cvtColor(og_img, cv2.COLOR_BGR2GRAY)
 
     # canny edge detection
     can = cv2.Canny(IMG, 50, 200)
@@ -211,5 +215,4 @@ if __name__ == '__main__':
     cv2.drawContours(can, rects, -1, (0, 255, 0), 3 )
 
     cv2.imshow('rectangles', can)
-    ch = 0xFF & cv2.waitKey()
 

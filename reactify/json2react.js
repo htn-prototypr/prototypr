@@ -2,8 +2,8 @@ var fs = require('fs');
 
 var layer_colours = [ "#DDDDDD", "#BBBBBB" ];
 
-function get_json (callback) {
-    fs.readFile('example.json', function (err, data) {
+function get_json (file_path, callback) {
+    fs.readFile(file_path, function (err, data) {
         // check if read file succeeds
         if (err) {
             callback(false, err);
@@ -85,7 +85,7 @@ function customCreateWriteStream (fs, filePath, shouldAppend) {
     return writable;
 }
 
-function generate_react(generator) {
+function generate_react(generator, file_path) {
     var filePath = './js/test/index.android.js';
     var writable = customCreateWriteStream(fs, filePath, false);
     var readable = fs.createReadStream('react_template/android_template_1.js');
@@ -93,7 +93,7 @@ function generate_react(generator) {
     writable.on('finish', function () {
         var writable = customCreateWriteStream(fs, filePath, true);
         var readable = fs.createReadStream('react_template/android_template_2.js');
-        get_json(function (success, view_json) {
+        get_json(file_path, function (success, view_json) {
             if (success) {
                 build_jsx_and_stylesheet(view_json, function (JSXArray, Stylesheet) {
                     for (var i in JSXArray) {
@@ -127,7 +127,7 @@ if (process.argv.length != 3) {
     process.exit(1);
 }
 
-file_path = "gen_json/" + process.argv[2];
+file_path = "json/" + process.argv[2];
 fs.exists(file_path, function (exists) {
     if (!exists) {
         console.error("JSON file path passed to json2react does not exist!");
@@ -135,5 +135,5 @@ fs.exists(file_path, function (exists) {
     }
     var android_generator = require('./generators/android_generator');
     var ios_generator = require('./generators/ios_generator');
-    generate_react(android_generator);
+    generate_react(android_generator, file_path);
 });

@@ -9,7 +9,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -184,7 +183,6 @@ public class MainActivity extends Activity {
         String timeString = "" + new Date().getTime();
         for (int i = 1; i <= counter; i++) {
             try {
-                Log.d("Anojh" , "uploading image " + i);
                 File imagesFolder = new File(Environment.getExternalStorageDirectory(), "MyImages");
                 File imageFile = new File(imagesFolder, "image_00" + i + ".jpg");
                 String contentType = "image/jpeg";
@@ -197,7 +195,7 @@ public class MainActivity extends Activity {
     }
 
     private String getNameForImage(String timeString, int i) {
-        return timeString + " - " + i;
+        return timeString + "_" + i + ".jpg";
     }
 
     @Override
