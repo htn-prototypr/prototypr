@@ -1,5 +1,5 @@
 all: clean build
 clean:
-	rm reactify/output/test
+	rm -r reactify/output/test
 build:
 	sh run.sh
