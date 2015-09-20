@@ -253,7 +253,6 @@ if __name__ == '__main__':
         og_img = cv2.resize(og_img, (720, 1280))
 
     #preprocess
-    global IMG
     img = cv2.cvtColor(og_img, cv2.COLOR_BGR2GRAY)
     IMG = img.copy()
 
@@ -262,7 +261,6 @@ if __name__ == '__main__':
     st = cv2.getStructuringElement(cv2.MORPH_RECT, (7,7))
     can = cv2.morphologyEx(can, cv2.MORPH_CLOSE, st, iterations=1)
 
-    global PROC_IMG
     PROC_IMG = can.copy()
 
     _, rects, _, _ = find_shapes(can)
