@@ -12,11 +12,15 @@ import cv2
 import json
 import random
 import string
+# import pytesseract
+# import Image
 
 IMG = None
 INPUT = 'data/pic6.png'
 OUTPUT = 'json/app.json'
 ID_LENGTH = 5   # for ids used in the json
+SCREEN_W = 360
+SCREEN_H = 640
 
 class Rectangle(object):
     # p2 is bottom right (max)
@@ -39,22 +43,43 @@ class Rectangle(object):
     def add_child(self, other):
         self.children.append(other)
 
+    def width(self):
+        return (int)(self.p2[0] - self.p1[0])
+
+    def height(self):
+        return (int)(self.p2[1] - self.p1[1])
+
+    def get_scales(self):
+        if self.parent:
+            return self.parent.get_scales()
+        else:
+            return (int)(SCREEN_W / self.width()), (int)(SCREEN_H / self.height())
+
     def to_dict(self):
         node_type = 'container'
         if not self.children:
             crop_img = IMG[self.p1[1]: self.p2[1], self.p1[0]:self.p2[0]]
-            node_type = 'do ocr'
+            # crop_img_pil = Image.fromarray(crop_img)
+            # node_str = pytesseract.image_to_string(crop_img_pil)
+            # print node_str
+            node_type = 'container'
 
-        node_id = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(ID_LENGTH))
+        node_id = ''.join(random.choice(string.ascii_uppercase) for _ in range(ID_LENGTH))
 
-        style = {}
-        if self.parent is not None:
-            style = {
-                'width': (int)(self.p2[0] - self.p1[0]),
-                'height': (int)(self.p2[1] - self.p1[1]),
-                'marginTop': (int)(self.p1[1] - self.parent.p1[1]),
-                'marginBottom': (int)(self.parent.p2[1] - self.p2[1]),
-            }
+        scale_w, scale_h = self.get_scales()
+
+        marginTop = 0
+        marginLeft = 0
+        if self.parent:
+            marginTop = (int)(self.p1[1] - self.parent.p1[1]) * scale_h
+            marginLeft = (int)(self.p1[0] - self.parent.p1[0]) * scale_w
+
+        style = {
+            'width': self.width() * scale_w,
+            'height': self.height() * scale_h,
+            'marginTop': marginTop,
+            'marginLeft': marginLeft,
+        }
 
         return {
             'type': node_type,
@@ -152,8 +177,15 @@ def save_to_json(tree):
         json.dump({'root': {'children': json_list}}, out) 
 
 if __name__ == '__main__':
+    import sys
+
+    if len(sys.argv) >= 2:
+        f = sys.argv[1]
+    else:
+        f = INPUT
+
     #read in
-    og_img = cv2.imread(INPUT)
+    og_img = cv2.imread(f)
 
     #preprocess
     global IMG
