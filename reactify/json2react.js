@@ -73,8 +73,12 @@ function build_jsx_and_stylesheet (view_json, callback, generator) {
     callback(JSXArray, Stylesheet);
 }
 
-function customCreateWriteStream (fs, filePath) {
-    var writable = fs.createWriteStream(filePath, { flags: 'a' });
+function customCreateWriteStream (fs, filePath, shouldAppend) {
+    var flag = 'w';
+    if (shouldAppend) {
+        flag = 'a';
+    }
+    var writable = fs.createWriteStream(filePath, { flags: flag });
     writable.on('error', function () {
         process.exit(1);
     });
@@ -83,11 +87,11 @@ function customCreateWriteStream (fs, filePath) {
 
 function generate_react(generator) {
     var filePath = './js/test/index.android.js';
-    var writable = customCreateWriteStream(fs, filePath);
+    var writable = customCreateWriteStream(fs, filePath, false);
     var readable = fs.createReadStream('react_template/android_template_1.js');
     readable.pipe(writable);
     writable.on('finish', function () {
-        var writable = customCreateWriteStream(fs, filePath);
+        var writable = customCreateWriteStream(fs, filePath, true);
         var readable = fs.createReadStream('react_template/android_template_2.js');
         get_json(function (success, view_json) {
             if (success) {
@@ -98,7 +102,7 @@ function generate_react(generator) {
                     }
                     readable.pipe(writable);
                     writable.on('finish', function () {
-                        var writable = customCreateWriteStream(fs, filePath);
+                        var writable = customCreateWriteStream(fs, filePath, true);
                         for (var i in Stylesheet) {
                             writable.write(Stylesheet[i]);
                             writable.write("\n");

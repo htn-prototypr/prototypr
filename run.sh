@@ -26,6 +26,6 @@ if [ $? != 0 ]; then
     return 0;
 fi
 
-# python reactify.py
+python reactify.py
 
 echo "Prototyped image: $chosen_file!"
