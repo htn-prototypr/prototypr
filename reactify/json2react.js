@@ -32,7 +32,10 @@ function add_stylesheet_entry (Stylesheet, view, level) {
     Stylesheet.push(view.id + ": {");
     var style = view.style;
     for (var i in style) {
-        Stylesheet.push("    " + i + ": '" + style[i] + "',");
+        if (typeof style[i] === 'number')
+            Stylesheet.push("    " + i + ": " + style[i] + ",");
+        else
+            Stylesheet.push("    " + i + ": '" + style[i] + "',");
     }
 
     // add default styles for a text view
