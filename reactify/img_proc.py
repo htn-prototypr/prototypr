@@ -56,7 +56,7 @@ class Rectangle(object):
         if self.parent:
             return self.parent.get_scales()
         else:
-            return (int)(SCREEN_W / self.width()), (int)(SCREEN_H / self.height())
+            return SCREEN_W / (float)(self.width()), SCREEN_H / (float)(self.height())
 
     def to_dict(self):
         node_type = 'container'
@@ -80,15 +80,17 @@ class Rectangle(object):
 
         scale_w, scale_h = self.get_scales()
 
+        print scale_h, scale_w
+
         marginTop = 0
         marginLeft = 0
         if self.parent:
-            marginTop = (int)(self.p1[1] - self.parent.p1[1]) * scale_h
-            marginLeft = (int)(self.p1[0] - self.parent.p1[0]) * scale_w
+            marginTop = (int)((self.p1[1] - self.parent.p1[1]) * scale_h)
+            marginLeft = (int)((self.p1[0] - self.parent.p1[0]) * scale_w)
 
         style = {
-            'width': self.width() * scale_w,
-            'height': self.height() * scale_h,
+            'width': (int)(self.width() * scale_w),
+            'height': (int)(self.height() * scale_h),
             'marginTop': marginTop,
             'marginLeft': marginLeft,
         }
@@ -203,7 +205,7 @@ if __name__ == '__main__':
     #read in
     og_img = cv2.imread(f)
     if og_img.shape[0] > 720 or og_img.shape[1] > 1280:
-        og_img = cv2.resize(og_img, (1080, 1920))
+        og_img = cv2.resize(og_img, (720, 1280))
 
     #preprocess
     IMG = cv2.cvtColor(og_img, cv2.COLOR_BGR2GRAY)
@@ -224,6 +226,6 @@ if __name__ == '__main__':
     can = cv2.cvtColor(can, cv2.COLOR_GRAY2RGB)
     cv2.drawContours(can, rects, -1, (0, 255, 0), 3 )
 
-    # cv2.imshow('rectangles', can)
-    # ch = 0xFF & cv2.waitKey()
+    cv2.imshow('rectangles', can)
+    ch = 0xFF & cv2.waitKey()
 
