@@ -16,21 +16,31 @@ function text_view (id, closing) {
 
 function image_view (id, closing) {
     if (!closing) {
-        return "<Image source={uri: 'http://static5.businessinsider.com/image/511d104a69bedd1f7c000012/grumpy-cat-definitely-did-not-make-100-million.jpg'} style={styles." + id + "}>\n";
+        return "<Image source={{uri: 'http://static5.businessinsider.com/image/511d104a69bedd1f7c000012/grumpy-cat-definitely-did-not-make-100-million.jpg'}} style={styles." + id + "}/>";
     } else {
-        return "</Image>";
+        return "";
+    }
+}
+
+function button_view (id, closing) {
+    if (!closing) {
+        return "<TouchableHighlight style={styles." + id + "}>\nButton";
+    } else {
+        return "</TouchableHighlight>";
     }
 }
 
 module.exports = {
     get_xml_tag : function (type, id, closing) {
         switch (type) {
-            case 'container' :
+            case 'container':
                 return container(id, closing);
-            case 'text_view' :
+            case 'text_view':
                 return text_view(id, closing);
-            case 'image_view' :
+            case 'image_view':
                 return image_view(id, closing);
+            case 'button_view':
+                return button_view(id, closing);
             default:
                 return false;
         }

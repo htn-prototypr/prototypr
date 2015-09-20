@@ -31,11 +31,18 @@ function build_tabs_string (level) {
 function add_stylesheet_entry (Stylesheet, view, level) {
     Stylesheet.push(view.id + ": {");
     var style = view.style;
-    for (var i in style) {
-        if (typeof style[i] === 'number')
-            Stylesheet.push("    " + i + ": " + style[i] + ",");
-        else
-            Stylesheet.push("    " + i + ": '" + style[i] + "',");
+    for (var attr in style) {
+        var val = style[attr];
+        if (attr === 'marginTop') {
+            attr = 'top';
+        } else if (attr === 'marginLeft') {
+            attr = 'left';
+        }
+        if (typeof val === 'number') {
+            Stylesheet.push("    " + attr + ": " + val + ",");
+        } else {
+            Stylesheet.push("    " + attr + ": '" + val + "',");
+        }
     }
 
     // add default styles for a text view
@@ -45,7 +52,8 @@ function add_stylesheet_entry (Stylesheet, view, level) {
     }
 
     // default background colours so we can distinguish between different elements in the UI
-    Stylesheet.push("    backgroundColor: '" + layer_colours[level % 2] + "'");
+    Stylesheet.push("    backgroundColor: '" + layer_colours[level % 2] + "',");
+    Stylesheet.push("    position: 'absolute',");
     Stylesheet.push("},");
 }
 

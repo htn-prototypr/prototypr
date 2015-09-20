@@ -75,7 +75,7 @@ class Rectangle(object):
             node_str = pytesseract.image_to_string(tess)
             # print node_str
             # tess.show()
-            node_type = 'textview'
+            node_type = 'text_view'
 
 
         scale_w, scale_h = self.get_scales()
