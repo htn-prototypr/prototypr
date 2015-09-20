@@ -14,6 +14,14 @@ function text_view (id, closing) {
     }
 }
 
+function image_view (id, closing) {
+    if (!closing) {
+        return "<Image source={uri: 'http://static5.businessinsider.com/image/511d104a69bedd1f7c000012/grumpy-cat-definitely-did-not-make-100-million.jpg'} style={styles." + id + "}>\n";
+    } else {
+        return "</Image>";
+    }
+}
+
 module.exports = {
     get_xml_tag : function (type, id, closing) {
         switch (type) {
@@ -21,6 +29,8 @@ module.exports = {
                 return container(id, closing);
             case 'text_view' :
                 return text_view(id, closing);
+            case 'image_view' :
+                return image_view(id, closing);
             default:
                 return false;
         }
