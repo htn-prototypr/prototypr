@@ -73,37 +73,63 @@ function build_jsx_and_stylesheet (view_json, callback, generator) {
     callback(JSXArray, Stylesheet);
 }
 
+function customCreateWriteStream (fs, filePath) {
+    var writable = fs.createWriteStream(filePath, { flags: 'a' });
+    writable.on('error', function () {
+        process.exit(1);
+    });
+    return writable;
+}
 
 function generate_react(generator) {
     var filePath = './js/test/index.android.js';
-    var writable = fs.createWriteStream(filePath);
+    var writable = customCreateWriteStream(fs, filePath);
     var readable = fs.createReadStream('react_template/android_template_1.js');
     readable.pipe(writable);
     writable.on('finish', function () {
-        var writable = fs.createWriteStream(filePath, { flags: 'a' });
+        var writable = customCreateWriteStream(fs, filePath);
         var readable = fs.createReadStream('react_template/android_template_2.js');
         get_json(function (success, view_json) {
-            build_jsx_and_stylesheet(view_json, function (JSXArray, Stylesheet) {
-                for (var i in JSXArray) {
-                    writable.write(JSXArray[i]);
-                    writable.write("\n");
-                }
-                readable.pipe(writable);
-                writable.on('finish', function () {
-                    var writable = fs.createWriteStream(filePath, { flags: 'a' });
-                    for (var i in Stylesheet) {
-                        writable.write(Stylesheet[i]);
+            if (success) {
+                build_jsx_and_stylesheet(view_json, function (JSXArray, Stylesheet) {
+                    for (var i in JSXArray) {
+                        writable.write(JSXArray[i]);
                         writable.write("\n");
                     }
-                    var readable = fs.createReadStream('react_template/android_template_3.js');
                     readable.pipe(writable);
-                }); 
-            }, generator);
+                    writable.on('finish', function () {
+                        var writable = customCreateWriteStream(fs, filePath);
+                        for (var i in Stylesheet) {
+                            writable.write(Stylesheet[i]);
+                            writable.write("\n");
+                        }
+                        var readable = fs.createReadStream('react_template/android_template_3.js');
+                        readable.pipe(writable);
+                        writable.on('finish', function () {
+                            console.log("Conversion of JSON to React code succeeded!");
+                            process.exit(0);
+                        });
+                    }); 
+                }, generator);
+            } else {
+                process.exit(1);
+            }
         });
     });
 }
 
-var android_generator = require('./generators/android_generator');
-var ios_generator = require('./generators/ios_generator');
+if (process.argv.length != 3) {
+    console.error("Not the right number of parameters pass to json2react! Need 1 but got " + (process.argv.length - 2));
+    process.exit(1);
+}
 
-generate_react(android_generator);
+file_path = "gen_json/" + process.argv[2];
+fs.exists(file_path, function (exists) {
+    if (!exists) {
+        console.error("JSON file path passed to json2react does not exist!");
+        process.exit(1);
+    }
+    var android_generator = require('./generators/android_generator');
+    var ios_generator = require('./generators/ios_generator');
+    generate_react(android_generator);
+});
