@@ -32,6 +32,6 @@ fi
 
 python reactify.py
 cd ..
-rm $chosen_file
+mv $chosen_file finished_images
 
 echo "Prototyped image: $chosen_file!"

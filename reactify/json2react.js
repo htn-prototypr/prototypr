@@ -50,10 +50,11 @@ function add_stylesheet_entry (Stylesheet, view, level) {
         Stylesheet.push("    color: 'white',");
         Stylesheet.push("    fontSize: 12,");
         Stylesheet.push("    textAlign: 'center',");
+        Stylesheet.push("    marginTop: 5,");
         Stylesheet.push("    backgroundColor: '#607D8B',");
     } else if (view.type === 'button_view') {
         Stylesheet.push("    backgroundColor: '#607D8B',");
-        Stylesheet.push("    borderRadius: 5,");
+        Stylesheet.push("    borderRadius: 4,");
     } else {
         // default background colours so we can distinguish between different elements in the UI
         Stylesheet.push("    backgroundColor: '" + layer_colours[level % 2] + "',");
@@ -80,8 +81,8 @@ function build_jsx_and_stylesheet (view_json, callback, generator) {
     var Stylesheet = [];
 
     Stylesheet.push("_root: {},");
-    Stylesheet.push("title: {width: 360, color: 'white', height: 25, position: 'absolute', top: 5, left: 10, fontSize: 16},");
-    Stylesheet.push("actionbar: {width: 360, height: 35, position: 'absolute', top: 0, left: 0, backgroundColor: '#263238'},");
+    Stylesheet.push("title: {width: 360, color: 'white', height: 30, position: 'absolute', top: 10, left: 10, fontSize: 18},");
+    Stylesheet.push("actionbar: {width: 360, height: 45, position: 'absolute', top: 0, left: 0, backgroundColor: '#263238'},");
     Stylesheet.push("text_view: {color: 'white', textAlign: 'center'},");
     
     JSXArray.push("<View style={styles._root}>");
