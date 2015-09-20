@@ -64,7 +64,10 @@ function recurse_build_jsx_and_stylesheet (JSXArray, Stylesheet, view_array, lev
 function build_jsx_and_stylesheet (view_json, callback, generator) {
     var JSXArray = [];
     var Stylesheet = [];
-    JSXArray.push("<View style={_root}>");
+
+    Stylesheet.push("_root: {},");
+    
+    JSXArray.push("<View style={styles._root}>");
     recurse_build_jsx_and_stylesheet(JSXArray, Stylesheet, view_json["root"]["children"], 1, generator);
     JSXArray.push("</View>");
     callback(JSXArray, Stylesheet);

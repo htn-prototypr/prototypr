@@ -1,6 +1,6 @@
 function container (id, closing) {
     if (!closing) {
-        return "<View style={" + id + "}>";
+        return "<View style={styles." + id + "}>";
     } else {
         return "</View>";
     }
@@ -8,7 +8,7 @@ function container (id, closing) {
 
 function text_view (id, closing) {
     if (!closing) {
-        return "<Text style={" + id + "}>\nLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";
+        return "<Text style={styles." + id + "}>\nLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";
     } else {
         return "</Text>";
     }
