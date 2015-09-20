@@ -42,7 +42,7 @@ function add_stylesheet_entry (Stylesheet, view, level) {
     }
 
     // default background colours so we can distinguish between different elements in the UI
-    Stylesheet.push("    backgroundColor: " + layer_colours[level % 2]);
+    Stylesheet.push("    backgroundColor: '" + layer_colours[level % 2] + "'");
     Stylesheet.push("},");
 }
 
