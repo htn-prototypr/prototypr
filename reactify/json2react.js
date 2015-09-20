@@ -22,24 +22,6 @@ function get_json (callback) {
     });
 }
 
-function convert_to_xml_tags (type, id, closing) {
-    if (!closing) {
-        switch(type) {
-            case 'container': 
-                return "<View style={" + id + "}>";
-            default:
-                return false;
-        }
-    } else {
-        switch(type) {
-            case 'container':
-                return "</View>";
-            default:
-                return false;
-        }
-    }
-}
-
 function build_tabs_string (level) {
     var tabs_string = "";
     for (var i = 0; i < level; i++) tabs_string += "    ";
@@ -50,35 +32,43 @@ function add_stylesheet_entry (Stylesheet, view, level) {
     Stylesheet.push(view.id + ": {");
     var style = view.style;
     for (var i in style) {
-        Stylesheet.push("    " + i + ": " + style[i] + ",");
+        Stylesheet.push("    " + i + ": '" + style[i] + "',");
     }
+
+    // add default styles for a text view
+    if (view.type === 'text_view') {
+        Stylesheet.push("    fontSize: '12',");
+        Stylesheet.push("    textAlign: 'center',");
+    }
+
+    // default background colours so we can distinguish between different elements in the UI
     Stylesheet.push("    backgroundColor: " + layer_colours[level % 2]);
     Stylesheet.push("},");
 }
 
-function recurse_build_jsx_and_stylesheet (JSXArray, Stylesheet, view_array, level) {
+function recurse_build_jsx_and_stylesheet (JSXArray, Stylesheet, view_array, level, generator) {
     for (var i in view_array) {
         var closing = false;
         var view = view_array[i];
-        JSXArray.push(build_tabs_string(level) + convert_to_xml_tags(view.type, view.id, closing));
+        JSXArray.push(build_tabs_string(level) + generator.get_xml_tag(view.type, view.id, closing));
         add_stylesheet_entry(Stylesheet, view, level);
-        recurse_build_jsx_and_stylesheet (JSXArray, Stylesheet, view.children, level + 1);
+        recurse_build_jsx_and_stylesheet (JSXArray, Stylesheet, view.children, level + 1, generator);
         closing = true;
-        JSXArray.push(build_tabs_string(level) + convert_to_xml_tags(view.type, view.id, closing));
+        JSXArray.push(build_tabs_string(level) + generator.get_xml_tag(view.type, view.id, closing));
     }
 }
 
-function build_jsx_and_stylesheet (view_json, callback) {
+function build_jsx_and_stylesheet (view_json, callback, generator) {
     var JSXArray = [];
     var Stylesheet = [];
     JSXArray.push("<View style={_root}>");
-    recurse_build_jsx_and_stylesheet(JSXArray, Stylesheet, view_json["root"]["children"], 1);
+    recurse_build_jsx_and_stylesheet(JSXArray, Stylesheet, view_json["root"]["children"], 1, generator);
     JSXArray.push("</View>");
     callback(JSXArray, Stylesheet);
 }
 
 
-function generate_react() {
+function generate_react(generator) {
     var filePath = './js/test/index.android.js';
     var writable = fs.createWriteStream(filePath);
     var readable = fs.createReadStream('react_template/android_template_1.js');
@@ -102,9 +92,12 @@ function generate_react() {
                     var readable = fs.createReadStream('react_template/android_template_3.js');
                     readable.pipe(writable);
                 }); 
-            });
+            }, generator);
         });
     });
 }
 
-generate_react();
+var android_generator = require('./generators/android_generator');
+var ios_geneartor = require('./generators/ios_generator');
+
+generate_react(android_generator);
