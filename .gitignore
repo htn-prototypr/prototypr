@@ -1,5 +1,5 @@
 reactify/output/*
 *.swp
 reactify/js/test/*
-gs_polling/image_queue/
-gs_polling/test_files/
+image_queue/
+test_files/
