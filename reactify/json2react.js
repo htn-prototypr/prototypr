@@ -53,6 +53,7 @@ function add_stylesheet_entry (Stylesheet, view, level) {
         Stylesheet.push("    backgroundColor: '#607D8B',");
     } else if (view.type === 'button_view') {
         Stylesheet.push("    backgroundColor: '#607D8B',");
+        Stylesheet.push("    borderRadius: 5,");
     } else {
         // default background colours so we can distinguish between different elements in the UI
         Stylesheet.push("    backgroundColor: '" + layer_colours[level % 2] + "',");
