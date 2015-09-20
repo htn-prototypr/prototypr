@@ -14,4 +14,5 @@ cp js/$1/index.android.js output/$2
 
 cd output/$2
 
+adb reverse tcp:8081 tcp:8081
 react-native run-android

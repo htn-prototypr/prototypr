@@ -8,3 +8,6 @@ gsutil mv gs://prototypr-images/* gs://prototypr-images-processed/
 # now call image processor application
 
 # now call json to react
+cd reactify
+node json2react.js
+python reactify.py
