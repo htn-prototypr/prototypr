@@ -9,7 +9,19 @@
                     "width" : 10,
                     "height" : 10
                 },
-                "id" : "temp_one"
+                "id" : "temp_one",
+                "children" : [
+                    {
+                        "type" : "container",
+                        "style" : {
+                            "marginTop" : 1,
+                            "marginLeft" : 1,
+                            "width" : 2,
+                            "height" : 2
+                        },
+                        "id" : "temp_three"
+                    }
+                ]
             },
             {
                 "type" : "container",

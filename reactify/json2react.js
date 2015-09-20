@@ -1,5 +1,7 @@
 var fs = require('fs');
 
+var layer_colours = [ "#DDDDDD", "#BBBBBB" ];
+
 function get_json (callback) {
     fs.readFile('example.json', function (err, data) {
         // check if read file succeeds
@@ -38,24 +40,31 @@ function convert_to_xml_tags (type, id, closing) {
     }
 }
 
-function add_stylesheet_entry (Stylesheet, view) {
+function build_tabs_string (level) {
+    var tabs_string = "";
+    for (var i = 0; i < level; i++) tabs_string += "    ";
+    return tabs_string;
+}
+
+function add_stylesheet_entry (Stylesheet, view, level) {
     Stylesheet.push(view.id + ": {");
     var style = view.style;
     for (var i in style) {
         Stylesheet.push("    " + i + ": " + style[i] + ",");
     }
+    Stylesheet.push("    backgroundColor: " + layer_colours[level % 2]);
     Stylesheet.push("},");
 }
 
-function recurse_build_jsx_and_stylesheet (JSXArray, Stylesheet, view_array) {
+function recurse_build_jsx_and_stylesheet (JSXArray, Stylesheet, view_array, level) {
     for (var i in view_array) {
         var closing = false;
         var view = view_array[i];
-        JSXArray.push(convert_to_xml_tags(view.type, view.id, closing));
-        add_stylesheet_entry(Stylesheet, view);
-        recurse_build_jsx_and_stylesheet (JSXArray, Stylesheet, view.children);
+        JSXArray.push(build_tabs_string(level) + convert_to_xml_tags(view.type, view.id, closing));
+        add_stylesheet_entry(Stylesheet, view, level);
+        recurse_build_jsx_and_stylesheet (JSXArray, Stylesheet, view.children, level + 1);
         closing = true;
-        JSXArray.push(convert_to_xml_tags(view.type, view.id, closing));
+        JSXArray.push(build_tabs_string(level) + convert_to_xml_tags(view.type, view.id, closing));
     }
 }
 
@@ -63,7 +72,7 @@ function build_jsx_and_stylesheet (view_json, callback) {
     var JSXArray = [];
     var Stylesheet = [];
     JSXArray.push("<View style={_root}>");
-    recurse_build_jsx_and_stylesheet(JSXArray, Stylesheet, view_json["root"]["children"]);
+    recurse_build_jsx_and_stylesheet(JSXArray, Stylesheet, view_json["root"]["children"], 1);
     JSXArray.push("</View>");
     callback(JSXArray, Stylesheet);
 }
