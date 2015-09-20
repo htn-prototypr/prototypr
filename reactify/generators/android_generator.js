@@ -24,7 +24,7 @@ function image_view (id, closing) {
 
 function button_view (id, closing) {
     if (!closing) {
-        return "<TouchableHighlight style={styles." + id + "}>\nButton";
+        return "<TouchableHighlight style={styles." + id + "}>\n<Text style={styles.text_view}>Button</Text>";
     } else {
         return "</TouchableHighlight>";
     }

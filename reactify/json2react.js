@@ -47,12 +47,17 @@ function add_stylesheet_entry (Stylesheet, view, level) {
 
     // add default styles for a text view
     if (view.type === 'text_view') {
+        Stylesheet.push("    color: 'white',");
         Stylesheet.push("    fontSize: 12,");
         Stylesheet.push("    textAlign: 'center',");
+        Stylesheet.push("    backgroundColor: '#607D8B',");
+    } else if (view.type === 'button_view') {
+        Stylesheet.push("    backgroundColor: '#607D8B',");
+    } else {
+        // default background colours so we can distinguish between different elements in the UI
+        Stylesheet.push("    backgroundColor: '" + layer_colours[level % 2] + "',");
     }
 
-    // default background colours so we can distinguish between different elements in the UI
-    Stylesheet.push("    backgroundColor: '" + layer_colours[level % 2] + "',");
     Stylesheet.push("    position: 'absolute',");
     Stylesheet.push("},");
 }
@@ -74,6 +79,9 @@ function build_jsx_and_stylesheet (view_json, callback, generator) {
     var Stylesheet = [];
 
     Stylesheet.push("_root: {},");
+    Stylesheet.push("title: {width: 360, color: 'white', height: 25, position: 'absolute', top: 5, left: 10, fontSize: 16},");
+    Stylesheet.push("actionbar: {width: 360, height: 35, position: 'absolute', top: 0, left: 0, backgroundColor: '#263238'},");
+    Stylesheet.push("text_view: {color: 'white', textAlign: 'center'},");
     
     JSXArray.push("<View style={styles._root}>");
     recurse_build_jsx_and_stylesheet(JSXArray, Stylesheet, view_json["root"]["children"], 1, generator);

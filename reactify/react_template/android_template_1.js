@@ -16,4 +16,7 @@ var Test = React.createClass({
     render: function () {
         return (
             <DrawerLayoutAndroid
-                renderNavigationView={() => <Text>Test App</Text>}>
+                renderNavigationView={() => <Text>HTN Test App</Text>}>
+                <View style={styles.actionbar}>
+                    <Text style={styles.title}>HTN Test App</Text>
+                </View>
