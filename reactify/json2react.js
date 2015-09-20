@@ -70,7 +70,7 @@ function build_jsx_and_stylesheet (view_json, callback) {
 
 
 function generate_react() {
-    var filePath = './react_gen/Test/index.android.js';
+    var filePath = './js/test/index.android.js';
     var writable = fs.createWriteStream(filePath);
     var readable = fs.createReadStream('react_template/android_template_1.js');
     readable.pipe(writable);

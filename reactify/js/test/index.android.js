@@ -1,52 +1,39 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- */
 'use strict';
 
 var React = require('react-native');
 var {
-  AppRegistry,
-  StyleSheet,
-  Text,
-  View,
+    AppRegistry,
+    StyleSheet,
+    Text,
+    View,
 } = React;
 
-var TestProject = React.createClass({
-  render: function() {
-    return (
-      <View style={styles.container}>
-        <Text style={styles.welcome}>
-          Welcome to React Native!
-        </Text>
-        <Text style={styles.instructions}>
-          To get started, edit index.android.js
-        </Text>
-        <Text style={styles.instructions}>
-          Shake or press menu button for dev menu
-        </Text>
-      </View>
-    );
-  }
+var SampleApp = React.createClass({
+    render: function () {
+        return (
+<View style={_root}>
+<View style={temp_one}>
+</View>
+<View style={temp_two}>
+</View>
+</View>
+        );
+    }
 });
 
 var styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
+temp_one: {
+    marginTop: 10,
+    marginLeft: 10,
+    width: 10,
+    height: 10,
+},
+temp_two: {
+    marginTop: 30,
+    marginLeft: 10,
+    width: 10,
+    height: 10,
+},
 });
 
-AppRegistry.registerComponent('TestProject', () => TestProject);
+AppRegistry.registerComponent('SampleApp', () => SampleApp);
