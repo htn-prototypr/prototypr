@@ -32,8 +32,16 @@ function add_stylesheet_entry (Stylesheet, view, level) {
     Stylesheet.push(view.id + ": {");
     var style = view.style;
     for (var i in style) {
-        Stylesheet.push("    " + i + ": " + style[i] + ",");
+        Stylesheet.push("    " + i + ": '" + style[i] + "',");
     }
+
+    // add default styles for a text view
+    if (view.type === 'text_view') {
+        Stylesheet.push("    fontSize: '12',");
+        Stylesheet.push("    textAlign: 'center',");
+    }
+
+    // default background colours so we can distinguish between different elements in the UI
     Stylesheet.push("    backgroundColor: " + layer_colours[level % 2]);
     Stylesheet.push("},");
 }

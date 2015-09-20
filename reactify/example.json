@@ -24,7 +24,7 @@
                 ]
             },
             {
-                "type" : "container",
+                "type" : "text_view",
                 "style" : {
                     "marginTop" : 30,
                     "marginLeft" : 10,
