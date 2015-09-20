@@ -13,7 +13,7 @@ import json
 import random
 import string
 import pytesseract
-import Image
+from PIL import Image
 
 IMG = None
 INPUT = 'data/test.jpg'
@@ -105,6 +105,7 @@ def make_rectangles(rects):
     sorted_rects = sort_points(rects)
     rectangles = []
     for rect in sorted_rects:
+        print rect
         rectangles.append(Rectangle(rect[0][0], rect[0][1], rect[-1][0], rect[-1][1]))
 
     return rectangles

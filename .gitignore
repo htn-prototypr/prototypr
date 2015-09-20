@@ -1,5 +1,6 @@
 reactify/output/*
 *.swp
 reactify/js/test/*
+reactify/json/*
 image_queue/
 test_files/
