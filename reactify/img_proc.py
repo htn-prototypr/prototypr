@@ -226,6 +226,6 @@ if __name__ == '__main__':
     can = cv2.cvtColor(can, cv2.COLOR_GRAY2RGB)
     cv2.drawContours(can, rects, -1, (0, 255, 0), 3 )
 
-    cv2.imshow('rectangles', can)
-    ch = 0xFF & cv2.waitKey()
+    # cv2.imshow('rectangles', can)
+    # ch = 0xFF & cv2.waitKey()
 
