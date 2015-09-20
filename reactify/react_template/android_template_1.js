@@ -8,6 +8,6 @@ var {
     View,
 } = React;
 
-var SampleApp = React.createClass({
+var Test = React.createClass({
     render: function () {
         return (

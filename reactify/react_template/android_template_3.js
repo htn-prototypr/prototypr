@@ -1,3 +1,3 @@
 });
 
-AppRegistry.registerComponent('SampleApp', () => SampleApp);
+AppRegistry.registerComponent('Test', () => Test);
